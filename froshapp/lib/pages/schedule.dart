@@ -90,29 +90,29 @@ class _ScheduleState extends State<Schedule> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      // Background image container
-      Positioned.fill(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/bgr.png"),
-              fit: BoxFit.fill,
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return SafeArea(
+        child: Scaffold(
+            body: Stack(children: [
+      Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/bgr.png"),
+                fit: BoxFit.fill,
+              ),
             ),
           ),
-        ),
-      ),
-      SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Column(
+          Column(
             children: [
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: Container(
-                    height: 160,
-                    width: 350,
+                    height: screenHeight * 0.165,
+                    width: screenWidth * 0.79,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage("assets/images/logo.png"),
@@ -123,78 +123,85 @@ class _ScheduleState extends State<Schedule> {
                 ),
               ),
               Expanded(
+                flex: 2,
                 child: Swiper(
-                  viewportFraction: 0.65,
-                  scale: 0.88,
-                  autoplayDelay: 3000,
-                  indicatorLayout: PageIndicatorLayout.SCALE,
+                  itemCount: imagePaths.length,
+                  allowImplicitScrolling: true,
+                  layout: SwiperLayout.DEFAULT,
+                  autoplayDisableOnInteraction: true,
+                  curve: Curves.decelerate,
+                  viewportFraction: screenWidth * 0.0013,
+                  scale: screenHeight * 0.0008,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
                         image: DecorationImage(
                           image: AssetImage(imagePaths[index]),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     );
                   },
-                  itemCount: imagePaths.length,
-                  layout: SwiperLayout.DEFAULT,
-                  autoplayDisableOnInteraction: true,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.99,
-                  height: 145,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      width: 3,
-                      color: const Color.fromRGBO(180, 196, 0, 1),
+                child: Flexible(
+                  child: Container(
+                    width: screenWidth * 0.95,
+                    height: screenHeight * 0.14,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        width: screenWidth * 0.0059,
+                        color: const Color.fromRGBO(180, 196, 0, 1),
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "LEADERBOARD",
-                          style: TextStyle(
-                            fontFamily: 'HomeFont',
-                            fontSize: 22,
-                            color: Color.fromRGBO(180, 196, 0, 1),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: screenWidth * 0.04, top: screenHeight * 0.0065),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "LEADERBOARD",
+                            style: TextStyle(
+                              fontFamily: 'HomeFont',
+                              fontSize: 20,
+                              color: Color.fromRGBO(180, 196, 0, 1),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 1),
-                        Leaderboard(items: leaderboardItems),
-                      ],
+                          SizedBox(height: screenHeight * 0.001),
+                          Expanded(
+                            child: Leaderboard(items: leaderboardItems),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/Vector.png"),
-                    ),
-                  ),
-                  height: 120,
-                  width: 150,
-                ),
-              ),
+              SizedBox(height: screenHeight * 0.126),
             ],
+          ),
+        ],
+      ),
+      Positioned(
+        bottom: screenHeight * 0.01,
+        left: MediaQuery.of(context).size.width / 2 - 55,
+        child: Container(
+          height: screenHeight * 0.18,
+          width: MediaQuery.of(context).size.width * 0.26,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              alignment: Alignment.bottomCenter,
+              image: AssetImage("assets/images/Vector.png"),
+            ),
           ),
         ),
       ),
-
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
         child: Container(
@@ -208,84 +215,21 @@ class _ScheduleState extends State<Schedule> {
           return Align(
               alignment: isEven ? Alignment.centerLeft : Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding: EdgeInsets.only(
+                    left: screenWidth * 0.05, right: screenWidth * 0.05),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.43,
-                  height: 190,
+                  width: screenWidth * 0.43,
+                  height: screenHeight * 0.2,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(48),
                       color: Colors.black,
                       image: DecorationImage(
                           image: AssetImage(imagePaths1[index]),
                           fit: BoxFit.contain)),
-
-                  // child: Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.only(left: 20, top: 24),
-                  //       child: Text(
-                  //         texts[index],
-                  //         style: const TextStyle(
-                  //             color: Colors.white,
-                  //             fontFamily: 'HomeFont',
-                  //             fontSize: 25),
-                  //       ),
-                  //     ),
-                  //     const Padding(
-                  //       padding: EdgeInsets.only(left: 20, top: 5),
-                  //       child: Icon(
-                  //         Icons.calendar_month,
-                  //         size: 25,
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //     const Padding(
-                  //       padding: EdgeInsets.only(left: 20, top: 15),
-                  //       child: Icon(
-                  //         Icons.watch,
-                  //         size: 25,
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //     const Padding(
-                  //       padding: EdgeInsets.only(left: 20, top: 15),
-                  //       child: Icon(
-                  //         Icons.location_on,
-                  //         size: 25,
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //     Transform.translate(
-                  //       offset: const Offset(55, -105),
-                  //       child: Text(dateOfEvent[index],
-                  //           style: const TextStyle(
-                  //               color: Colors.white,
-                  //               fontFamily: 'HomeFont',
-                  //               fontSize: 20)),
-                  //     ),
-                  //     Transform.translate(
-                  //       offset: const Offset(55, -95),
-                  //       child: Text(time[index],
-                  //           style: const TextStyle(
-                  //               color: Colors.white,
-                  //               fontFamily: 'HomeFont',
-                  //               fontSize: 20)),
-                  //     ),
-                  //     Transform.translate(
-                  //       offset: const Offset(55, -85),
-                  //       child: Text(location[index],
-                  //           style: const TextStyle(
-                  //               color: Colors.white,
-                  //               fontFamily: 'HomeFont',
-                  //               fontSize: 20)),
-                  //     ),
-                  //   ],
-                  // ),
                 ),
               ));
         },
       ),
-    ]);
+    ])));
   }
 }
